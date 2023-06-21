@@ -1,3 +1,7 @@
+# Úpravy
+
+Přelinkování submodulů z originální větvě `MimeKit` na naší upravenou větev.
+
 # MailKit
 
 [![Join the chat at https://gitter.im/jstedfast/MailKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jstedfast/MailKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
