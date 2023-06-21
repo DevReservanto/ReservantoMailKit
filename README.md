@@ -1,3 +1,7 @@
+# Úpravy
+
+Přelinkování submodulů z originální větvě `MimeKit` na naší upravenou větev.
+
 # MailKit
 
 |  Package  |Latest Release|Latest Build|
