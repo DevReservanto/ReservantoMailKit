@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>An Open Source cross-platform .NET mail-client library that is based on MimeKit and optimized for mobile devices.</Description>
@@ -10,10 +10,10 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <AssemblyName>MailKit</AssemblyName>
-    <PackageId>MailKit</PackageId>
+    <PackageId>Reservanto.MailKit</PackageId>
     <PackageTags>smtp;pop3;imap;mime;security;dkim;smime;s/mime;openpgp;pgp;mbox;mail;email;parser;tnef;net462;net47;net48;net6.0;netstandard;netstandard2.0;netstandard2.1</PackageTags>
-    <PackageProjectUrl>https://github.com/jstedfast/MailKit</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/jstedfast/MailKit/blob/master/License.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/DevReservanto/ReservantoMailKit</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/DevReservanto/ReservantoMailKit/blob/master/LICENSE</PackageLicenseUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
