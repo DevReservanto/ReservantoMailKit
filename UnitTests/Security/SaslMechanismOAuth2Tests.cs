@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,7 @@
 // THE SOFTWARE.
 //
 
-using System;
 using System.Net;
-
-using NUnit.Framework;
 
 using MailKit.Security;
 
@@ -50,11 +47,11 @@ namespace UnitTests.Security {
 			const string expected = "dXNlcj11c2VybmFtZQFhdXRoPUJlYXJlciBwYXNzd29yZAEB";
 			string challenge;
 
-			Assert.IsTrue (sasl.SupportsInitialResponse, "SupportsInitialResponse");
+			Assert.That (sasl.SupportsInitialResponse, Is.True, $"{prefix}: SupportsInitialResponse");
 			challenge = sasl.Challenge (string.Empty);
-			Assert.IsTrue (sasl.IsAuthenticated, "IsAuthenticated");
-			Assert.AreEqual (expected, challenge, "Challenge");
-			Assert.AreEqual (string.Empty, sasl.Challenge (string.Empty), "Already authenticated.");
+			Assert.That (sasl.IsAuthenticated, Is.True, $"{prefix}: IsAuthenticated");
+			Assert.That (challenge, Is.EqualTo (expected), $"{prefix}: Challenge");
+			Assert.That (sasl.Challenge (string.Empty), Is.EqualTo (string.Empty), $"{prefix}: Already authenticated.");
 		}
 
 		[Test]

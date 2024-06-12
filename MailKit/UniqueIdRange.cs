@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -178,7 +178,7 @@ namespace MailKit {
 		/// </remarks>
 		/// <value>The count.</value>
 		public int Count {
-			get { return (int) (start <= end ? end - start : start - end) + 1; }
+			get { return (int) Math.Min ((start <= end ? end - start : start - end) + 1, int.MaxValue); }
 		}
 
 		/// <summary>

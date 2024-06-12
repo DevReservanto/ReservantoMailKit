@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -53,7 +53,7 @@ namespace MailKit {
 		/// not requested at all.</para>
 		/// </remarks>
 		/// <example>
-		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadBodyParts"/>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartsByUniqueId"/>
 		/// </example>
 		/// <returns>An enumeration of summaries for the requested messages.</returns>
 		/// <param name="folder">The folder.</param>
@@ -110,6 +110,9 @@ namespace MailKit {
 		/// messages that were requested as well as summaries for messages that were
 		/// not requested at all.</para>
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartsByUniqueId"/>
+		/// </example>
 		/// <returns>An enumeration of summaries for the requested messages.</returns>
 		/// <param name="folder">The folder.</param>
 		/// <param name="uids">The UIDs.</param>

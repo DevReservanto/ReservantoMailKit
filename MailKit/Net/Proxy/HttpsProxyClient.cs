@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -51,12 +51,11 @@ namespace MailKit.Net.Proxy {
 	/// </remarks>
 	public class HttpsProxyClient : ProxyClient
 	{
-#if NET48 || NET5_0_OR_GREATER
+#if NET48_OR_GREATER || NET5_0_OR_GREATER
 		const SslProtocols DefaultSslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13;
 #else
 		const SslProtocols DefaultSslProtocols = SslProtocols.Tls12 | (SslProtocols) 12288;
 #endif
-		const int BufferSize = 4096;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:MailKit.Net.Proxy.HttpsProxyClient"/> class.
@@ -199,10 +198,8 @@ namespace MailKit.Net.Proxy {
 
 			if (ServerCertificateValidationCallback != null) {
 				valid = ServerCertificateValidationCallback (ProxyHost, certificate, chain, sslPolicyErrors);
-#if !NETSTANDARD1_3 && !NETSTANDARD1_6
 			} else if (ServicePointManager.ServerCertificateValidationCallback != null) {
 				valid = ServicePointManager.ServerCertificateValidationCallback (ProxyHost, certificate, chain, sslPolicyErrors);
-#endif
 			} else {
 				valid = sslPolicyErrors == SslPolicyErrors.None;
 			}
@@ -295,25 +292,26 @@ namespace MailKit.Net.Proxy {
 			try {
 				ssl.Write (command, 0, command.Length);
 
-				var buffer = ArrayPool<byte>.Shared.Rent (BufferSize);
-				var builder = new StringBuilder ();
+				var builder = new ByteArrayBuilder (256);
+				var buffer = new byte[1];
+				var newline = false;
+				string response;
 
 				try {
-					var newline = false;
-
-					// read until we consume the end of the headers (it's ok if we read some of the content)
+					// read until we consume the end of the headers
 					do {
-						int nread = ssl.Read (buffer, 0, BufferSize);
-						int index = 0;
+						int nread = ssl.Read (buffer, 0, 1);
 
-						if (HttpProxyClient.TryConsumeHeaders (builder, buffer, ref index, nread, ref newline))
+						if (nread < 1 || HttpProxyClient.TryConsumeHeaders (builder, buffer[0], ref newline))
 							break;
 					} while (true);
+
+					response = builder.ToString ();
 				} finally {
-					ArrayPool<byte>.Shared.Return (buffer);
+					builder.Dispose ();
 				}
 
-				HttpProxyClient.ValidateHttpResponse (builder, host, port);
+				HttpProxyClient.ValidateHttpResponse (response, host, port);
 				return ssl;
 			} catch {
 				ssl.Dispose ();
@@ -375,25 +373,26 @@ namespace MailKit.Net.Proxy {
 			try {
 				await ssl.WriteAsync (command, 0, command.Length, cancellationToken).ConfigureAwait (false);
 
-				var buffer = ArrayPool<byte>.Shared.Rent (BufferSize);
-				var builder = new StringBuilder ();
+				var builder = new ByteArrayBuilder (256);
+				var buffer = new byte[1];
+				var newline = false;
+				string response;
 
 				try {
-					var newline = false;
-
-					// read until we consume the end of the headers (it's ok if we read some of the content)
+					// read until we consume the end of the headers
 					do {
-						int nread = ssl.Read (buffer, 0, BufferSize);
-						int index = 0;
+						int nread = ssl.Read (buffer, 0, 1);
 
-						if (HttpProxyClient.TryConsumeHeaders (builder, buffer, ref index, nread, ref newline))
+						if (HttpProxyClient.TryConsumeHeaders (builder, buffer[0], ref newline))
 							break;
 					} while (true);
+
+					response = builder.ToString ();
 				} finally {
-					ArrayPool<byte>.Shared.Return (buffer);
+					builder.Dispose ();
 				}
 
-				HttpProxyClient.ValidateHttpResponse (builder, host, port);
+				HttpProxyClient.ValidateHttpResponse (response, host, port);
 				return ssl;
 			} catch {
 				ssl.Dispose ();

@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,9 @@
 // THE SOFTWARE.
 //
 
-using System;
-using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 
 using MailKit.Net;
 
@@ -139,13 +135,9 @@ namespace UnitTests.Net.Proxy {
 		protected override async Task<Socket> ClientCommandReceived (Stream client, byte[] buffer, int length, CancellationToken cancellationToken)
 		{
 			Socket server = null;
-			Socks4Command cmd;
 			byte[] response;
-			IPAddress ip;
-			string user;
-			int port;
 
-			if (TryParse (buffer, length, out cmd, out port, out ip, out user)) {
+			if (TryParse (buffer, length, out var cmd, out var port, out var ip, out var user)) {
 				var host = ip.ToString ();
 
 				try {

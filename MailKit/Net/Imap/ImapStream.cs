@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -738,7 +738,7 @@ namespace MailKit.Net.Imap {
 				// skip over the '\n'
 				inputIndex++;
 
-				if (!builder.TryParse (1, endIndex, out literalDataLeft) || literalDataLeft < 0)
+				if (!builder.TryParse (1, endIndex, out literalDataLeft))
 					return ImapToken.Create (ImapTokenType.Error, builder.ToString ());
 
 				Mode = ImapStreamMode.Literal;
@@ -836,6 +836,12 @@ namespace MailKit.Net.Imap {
 			if (c == '\\')
 				return ReadFlagToken (specials, cancellationToken);
 
+			if (c == '+') {
+				inputIndex++;
+
+				return ImapToken.Plus;
+			}
+
 			if (IsAtom (input[inputIndex], specials))
 				return ReadAtomToken (specials, cancellationToken);
 
@@ -881,6 +887,12 @@ namespace MailKit.Net.Imap {
 
 			if (c == '\\')
 				return await ReadFlagTokenAsync (specials, cancellationToken).ConfigureAwait (false);
+
+			if (c == '+') {
+				inputIndex++;
+
+				return ImapToken.Plus;
+			}
 
 			if (IsAtom (input[inputIndex], specials))
 				return await ReadAtomTokenAsync (specials, cancellationToken).ConfigureAwait (false);

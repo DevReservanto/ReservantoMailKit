@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
+
+// https://datatracker.ietf.org/doc/search/?name=IMAP&rfcs=on&activedrafts=on&by=group
+// TODO: rfc9208 and rfc9394
 
 using System;
 
@@ -56,7 +59,7 @@ namespace MailKit.Net.Imap {
 		IMAP4rev1        = 1L << 1,
 
 		/// <summary>
-		/// The server implements the core IMAP4rev2 commands.
+		/// The server implements the core IMAP4rev2 commands described in <a href="https://tools.ietf.org/html/rfc9051">rfc9051</a>.
 		/// </summary>
 		IMAP4rev2        = 1L << 2,
 

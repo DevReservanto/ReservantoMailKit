@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +57,7 @@ namespace MailKit.Net.Imap {
 		ImapCapabilities Capabilities { get; set; }
 
 		/// <summary>
-		/// Gets the maximum size of a message that can be appended to a folder.
+		/// Get the maximum size of a message that can be appended to a folder.
 		/// </summary>
 		/// <remarks>
 		/// <para>Gets the maximum size of a message, in bytes, that can be appended to a folder.</para>
@@ -67,7 +67,7 @@ namespace MailKit.Net.Imap {
 		uint? AppendLimit { get; }
 
 		/// <summary>
-		/// Gets the internationalization level supported by the IMAP server.
+		/// Get the internationalization level supported by the IMAP server.
 		/// </summary>
 		/// <remarks>
 		/// <para>Gets the internationalization level supported by the IMAP server.</para>

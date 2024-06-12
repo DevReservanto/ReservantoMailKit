@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +26,8 @@
 
 // Note: Find Socks4 proxy list here: https://hideip.me/en/proxy/socks4list
 
-using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
-
-using NUnit.Framework;
 
 using MailKit.Net.Proxy;
 
@@ -53,10 +48,10 @@ namespace UnitTests.Net.Proxy {
 			Assert.Throws<ArgumentOutOfRangeException> (() => new Socks4Client (socks.ProxyHost, -1));
 			Assert.Throws<ArgumentNullException> (() => new Socks4Client (socks.ProxyHost, 1080, null));
 
-			Assert.AreEqual (4, socks.SocksVersion);
-			Assert.AreEqual (1080, socks.ProxyPort);
-			Assert.AreEqual ("socks4.proxy.com", socks.ProxyHost);
-			Assert.AreEqual (credentials, socks.ProxyCredentials);
+			Assert.That (socks.SocksVersion, Is.EqualTo (4));
+			Assert.That (socks.ProxyPort, Is.EqualTo (1080));
+			Assert.That (socks.ProxyHost, Is.EqualTo ("socks4.proxy.com"));
+			Assert.That (socks.ProxyCredentials, Is.EqualTo (credentials));
 
 			Assert.Throws<ArgumentNullException> (() => socks.Connect (null, 80));
 			Assert.Throws<ArgumentNullException> (() => socks.Connect (null, 80, ConnectTimeout));

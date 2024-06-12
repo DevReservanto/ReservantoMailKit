@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -415,6 +415,9 @@ namespace MailKit {
 		/// <see cref="Status(StatusItems, System.Threading.CancellationToken)"/>
 		/// with <see cref="StatusItems.Count"/> or by opening the folder.</note>
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessagesByIndex"/>
+		/// </example>
 		/// <value>The total number of messages.</value>
 		public int Count {
 			get; protected set;
@@ -4447,7 +4450,7 @@ namespace MailKit {
 		/// not requested at all.</para>
 		/// </remarks>
 		/// <example>
-		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadBodyParts"/>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartsByUniqueId"/>
 		/// </example>
 		/// <returns>An enumeration of summaries for the requested messages.</returns>
 		/// <param name="uids">The UIDs.</param>
@@ -5101,6 +5104,9 @@ namespace MailKit {
 		/// <remarks>
 		/// Gets the specified message.
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessagesByUniqueId"/>
+		/// </example>
 		/// <returns>The message.</returns>
 		/// <param name="uid">The UID of the message.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
@@ -5143,6 +5149,9 @@ namespace MailKit {
 		/// <remarks>
 		/// Asynchronously gets the specified message.
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessagesByUniqueId"/>
+		/// </example>
 		/// <returns>The message.</returns>
 		/// <param name="uid">The UID of the message.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
@@ -5185,6 +5194,9 @@ namespace MailKit {
 		/// <remarks>
 		/// Gets the specified message.
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessagesByIndex"/>
+		/// </example>
 		/// <returns>The message.</returns>
 		/// <param name="index">The index of the message.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
@@ -5227,6 +5239,9 @@ namespace MailKit {
 		/// <remarks>
 		/// Asynchronously gets the specified message.
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessagesByIndex"/>
+		/// </example>
 		/// <returns>The message.</returns>
 		/// <param name="index">The index of the message.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
@@ -5270,7 +5285,7 @@ namespace MailKit {
 		/// Gets the specified body part.
 		/// </remarks>
 		/// <example>
-		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadBodyParts"/>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartsByUniqueId"/>
 		/// </example>
 		/// <returns>The body part.</returns>
 		/// <param name="uid">The UID of the message.</param>
@@ -5449,6 +5464,198 @@ namespace MailKit {
 		/// The command failed.
 		/// </exception>
 		public abstract Task<MimeEntity> GetBodyPartAsync (int index, BodyPart part, CancellationToken cancellationToken = default, ITransferProgress progress = null);
+
+		/// <summary>
+		/// Get a message stream.
+		/// </summary>
+		/// <remarks>
+		/// Gets a message stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessageStreamsByUniqueId"/>
+		/// </example>
+		/// <returns>The message stream.</returns>
+		/// <param name="uid">The UID of the message.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		/// <exception cref="System.ArgumentException">
+		/// <paramref name="uid"/> is invalid.
+		/// </exception>
+		/// <exception cref="System.ObjectDisposedException">
+		/// The <see cref="IMailStore"/> has been disposed.
+		/// </exception>
+		/// <exception cref="ServiceNotConnectedException">
+		/// The <see cref="IMailStore"/> is not connected.
+		/// </exception>
+		/// <exception cref="ServiceNotAuthenticatedException">
+		/// The <see cref="IMailStore"/> is not authenticated.
+		/// </exception>
+		/// <exception cref="FolderNotOpenException">
+		/// The folder is not currently open.
+		/// </exception>
+		/// <exception cref="MessageNotFoundException">
+		/// The <see cref="IMailStore"/> did not return the requested message stream.
+		/// </exception>
+		/// <exception cref="System.OperationCanceledException">
+		/// The operation was canceled via the cancellation token.
+		/// </exception>
+		/// <exception cref="System.IO.IOException">
+		/// An I/O error occurred.
+		/// </exception>
+		/// <exception cref="ProtocolException">
+		/// The server's response contained unexpected tokens.
+		/// </exception>
+		/// <exception cref="CommandException">
+		/// The command failed.
+		/// </exception>
+		public virtual Stream GetStream (UniqueId uid, CancellationToken cancellationToken = default, ITransferProgress progress = null)
+		{
+			return GetStream (uid, string.Empty, cancellationToken, progress);
+		}
+
+		/// <summary>
+		/// Asynchronously get a message stream.
+		/// </summary>
+		/// <remarks>
+		/// Asynchronously gets a message stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessageStreamsByUniqueId"/>
+		/// </example>
+		/// <returns>The message stream.</returns>
+		/// <param name="uid">The UID of the message.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		/// <exception cref="System.ArgumentException">
+		/// <paramref name="uid"/> is invalid.
+		/// </exception>
+		/// <exception cref="System.ObjectDisposedException">
+		/// The <see cref="IMailStore"/> has been disposed.
+		/// </exception>
+		/// <exception cref="ServiceNotConnectedException">
+		/// The <see cref="IMailStore"/> is not connected.
+		/// </exception>
+		/// <exception cref="ServiceNotAuthenticatedException">
+		/// The <see cref="IMailStore"/> is not authenticated.
+		/// </exception>
+		/// <exception cref="FolderNotOpenException">
+		/// The folder is not currently open.
+		/// </exception>
+		/// <exception cref="MessageNotFoundException">
+		/// The <see cref="IMailStore"/> did not return the requested message stream.
+		/// </exception>
+		/// <exception cref="System.OperationCanceledException">
+		/// The operation was canceled via the cancellation token.
+		/// </exception>
+		/// <exception cref="System.IO.IOException">
+		/// An I/O error occurred.
+		/// </exception>
+		/// <exception cref="ProtocolException">
+		/// The server's response contained unexpected tokens.
+		/// </exception>
+		/// <exception cref="CommandException">
+		/// The command failed.
+		/// </exception>
+		public virtual Task<Stream> GetStreamAsync (UniqueId uid, CancellationToken cancellationToken = default, ITransferProgress progress = null)
+		{
+			return GetStreamAsync (uid, string.Empty, cancellationToken, progress);
+		}
+
+		/// <summary>
+		/// Get a message stream.
+		/// </summary>
+		/// <remarks>
+		/// Gets a message stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessageStreamsByIndex"/>
+		/// </example>
+		/// <returns>The message stream.</returns>
+		/// <param name="index">The index of the message.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <para><paramref name="index"/> is out of range.</para>
+		/// </exception>
+		/// <exception cref="System.ObjectDisposedException">
+		/// The <see cref="IMailStore"/> has been disposed.
+		/// </exception>
+		/// <exception cref="ServiceNotConnectedException">
+		/// The <see cref="IMailStore"/> is not connected.
+		/// </exception>
+		/// <exception cref="ServiceNotAuthenticatedException">
+		/// The <see cref="IMailStore"/> is not authenticated.
+		/// </exception>
+		/// <exception cref="FolderNotOpenException">
+		/// The folder is not currently open.
+		/// </exception>
+		/// <exception cref="MessageNotFoundException">
+		/// The <see cref="IMailStore"/> did not return the requested message stream.
+		/// </exception>
+		/// <exception cref="System.OperationCanceledException">
+		/// The operation was canceled via the cancellation token.
+		/// </exception>
+		/// <exception cref="System.IO.IOException">
+		/// An I/O error occurred.
+		/// </exception>
+		/// <exception cref="ProtocolException">
+		/// The server's response contained unexpected tokens.
+		/// </exception>
+		/// <exception cref="CommandException">
+		/// The command failed.
+		/// </exception>
+		public virtual Stream GetStream (int index, CancellationToken cancellationToken = default, ITransferProgress progress = null)
+		{
+			return GetStream (index, string.Empty, cancellationToken, progress);
+		}
+
+		/// <summary>
+		/// Asynchronously get a message stream.
+		/// </summary>
+		/// <remarks>
+		/// Asynchronously gets a message stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessageStreamsByIndex"/>
+		/// </example>
+		/// <returns>The message stream.</returns>
+		/// <param name="index">The index of the message.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <para><paramref name="index"/> is out of range.</para>
+		/// </exception>
+		/// <exception cref="System.ObjectDisposedException">
+		/// The <see cref="IMailStore"/> has been disposed.
+		/// </exception>
+		/// <exception cref="ServiceNotConnectedException">
+		/// The <see cref="IMailStore"/> is not connected.
+		/// </exception>
+		/// <exception cref="ServiceNotAuthenticatedException">
+		/// The <see cref="IMailStore"/> is not authenticated.
+		/// </exception>
+		/// <exception cref="FolderNotOpenException">
+		/// The folder is not currently open.
+		/// </exception>
+		/// <exception cref="MessageNotFoundException">
+		/// The <see cref="IMailStore"/> did not return the requested message stream.
+		/// </exception>
+		/// <exception cref="System.OperationCanceledException">
+		/// The operation was canceled via the cancellation token.
+		/// </exception>
+		/// <exception cref="System.IO.IOException">
+		/// An I/O error occurred.
+		/// </exception>
+		/// <exception cref="ProtocolException">
+		/// The server's response contained unexpected tokens.
+		/// </exception>
+		/// <exception cref="CommandException">
+		/// The command failed.
+		/// </exception>
+		public virtual Task<Stream> GetStreamAsync (int index, CancellationToken cancellationToken = default, ITransferProgress progress = null)
+		{
+			return GetStreamAsync (index, string.Empty, cancellationToken, progress);
+		}
 
 		/// <summary>
 		/// Get a substream of the specified message.
@@ -5657,6 +5864,232 @@ namespace MailKit {
 		public abstract Task<Stream> GetStreamAsync (int index, int offset, int count, CancellationToken cancellationToken = default, ITransferProgress progress = null);
 
 		/// <summary>
+		/// Get a body part as a stream.
+		/// </summary>
+		/// <remarks>
+		/// Gets a body part as a stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartStreamsByUniqueId"/>
+		/// </example>
+		/// <returns>The body part stream.</returns>
+		/// <param name="uid">The UID of the message.</param>
+		/// <param name="part">The desired body part.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		/// <exception cref="System.ArgumentException">
+		/// <paramref name="uid"/> is invalid.
+		/// </exception>
+		/// <exception cref="System.ArgumentNullException">
+		/// <paramref name="part"/> is <c>null</c>.
+		/// </exception>
+		/// <exception cref="System.ObjectDisposedException">
+		/// The <see cref="IMailStore"/> has been disposed.
+		/// </exception>
+		/// <exception cref="ServiceNotConnectedException">
+		/// The <see cref="IMailStore"/> is not connected.
+		/// </exception>
+		/// <exception cref="ServiceNotAuthenticatedException">
+		/// The <see cref="IMailStore"/> is not authenticated.
+		/// </exception>
+		/// <exception cref="FolderNotOpenException">
+		/// The folder is not currently open.
+		/// </exception>
+		/// <exception cref="MessageNotFoundException">
+		/// The <see cref="IMailStore"/> did not return the requested message stream.
+		/// </exception>
+		/// <exception cref="System.OperationCanceledException">
+		/// The operation was canceled via the cancellation token.
+		/// </exception>
+		/// <exception cref="System.IO.IOException">
+		/// An I/O error occurred.
+		/// </exception>
+		/// <exception cref="ProtocolException">
+		/// The server's response contained unexpected tokens.
+		/// </exception>
+		/// <exception cref="CommandException">
+		/// The command failed.
+		/// </exception>
+		public virtual Stream GetStream (UniqueId uid, BodyPart part, CancellationToken cancellationToken = default, ITransferProgress progress = null)
+		{
+			if (!uid.IsValid)
+				throw new ArgumentException ("The uid is invalid.", nameof (uid));
+
+			if (part == null)
+				throw new ArgumentNullException (nameof (part));
+
+			return GetStream (uid, part.PartSpecifier, cancellationToken, progress);
+		}
+
+		/// <summary>
+		/// Asynchronously get a body part as a stream.
+		/// </summary>
+		/// <remarks>
+		/// Asynchronously gets a body part as a stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartStreamsByUniqueId"/>
+		/// </example>
+		/// <returns>The body part stream.</returns>
+		/// <param name="uid">The UID of the message.</param>
+		/// <param name="part">The desired body part.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		/// <exception cref="System.ArgumentException">
+		/// <paramref name="uid"/> is invalid.
+		/// </exception>
+		/// <exception cref="System.ArgumentNullException">
+		/// <paramref name="part"/> is <c>null</c>.
+		/// </exception>
+		/// <exception cref="System.ObjectDisposedException">
+		/// The <see cref="IMailStore"/> has been disposed.
+		/// </exception>
+		/// <exception cref="ServiceNotConnectedException">
+		/// The <see cref="IMailStore"/> is not connected.
+		/// </exception>
+		/// <exception cref="ServiceNotAuthenticatedException">
+		/// The <see cref="IMailStore"/> is not authenticated.
+		/// </exception>
+		/// <exception cref="FolderNotOpenException">
+		/// The folder is not currently open.
+		/// </exception>
+		/// <exception cref="MessageNotFoundException">
+		/// The <see cref="IMailStore"/> did not return the requested message stream.
+		/// </exception>
+		/// <exception cref="System.OperationCanceledException">
+		/// The operation was canceled via the cancellation token.
+		/// </exception>
+		/// <exception cref="System.IO.IOException">
+		/// An I/O error occurred.
+		/// </exception>
+		/// <exception cref="ProtocolException">
+		/// The server's response contained unexpected tokens.
+		/// </exception>
+		/// <exception cref="CommandException">
+		/// The command failed.
+		/// </exception>
+		public virtual Task<Stream> GetStreamAsync (UniqueId uid, BodyPart part, CancellationToken cancellationToken = default, ITransferProgress progress = null)
+		{
+			if (!uid.IsValid)
+				throw new ArgumentException ("The uid is invalid.", nameof (uid));
+
+			if (part == null)
+				throw new ArgumentNullException (nameof (part));
+
+			return GetStreamAsync (uid, part.PartSpecifier, cancellationToken, progress);
+		}
+
+		/// <summary>
+		/// Get a body part as a stream.
+		/// </summary>
+		/// <remarks>
+		/// Gets a body part as a stream.
+		/// </remarks>
+		/// <returns>The body part stream.</returns>
+		/// <param name="index">The index of the message.</param>
+		/// <param name="part">The desired body part.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// <paramref name="part"/> is <c>null</c>.
+		/// </exception>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <para><paramref name="index"/> is out of range.</para>
+		/// </exception>
+		/// <exception cref="System.ObjectDisposedException">
+		/// The <see cref="IMailStore"/> has been disposed.
+		/// </exception>
+		/// <exception cref="ServiceNotConnectedException">
+		/// The <see cref="IMailStore"/> is not connected.
+		/// </exception>
+		/// <exception cref="ServiceNotAuthenticatedException">
+		/// The <see cref="IMailStore"/> is not authenticated.
+		/// </exception>
+		/// <exception cref="FolderNotOpenException">
+		/// The folder is not currently open.
+		/// </exception>
+		/// <exception cref="MessageNotFoundException">
+		/// The <see cref="IMailStore"/> did not return the requested message stream.
+		/// </exception>
+		/// <exception cref="System.OperationCanceledException">
+		/// The operation was canceled via the cancellation token.
+		/// </exception>
+		/// <exception cref="System.IO.IOException">
+		/// An I/O error occurred.
+		/// </exception>
+		/// <exception cref="ProtocolException">
+		/// The server's response contained unexpected tokens.
+		/// </exception>
+		/// <exception cref="CommandException">
+		/// The command failed.
+		/// </exception>
+		public virtual Stream GetStream (int index, BodyPart part, CancellationToken cancellationToken = default, ITransferProgress progress = null)
+		{
+			if (index < 0 || index >= Count)
+				throw new ArgumentOutOfRangeException (nameof (index));
+
+			if (part == null)
+				throw new ArgumentNullException (nameof (part));
+
+			return GetStream (index, part.PartSpecifier, cancellationToken, progress);
+		}
+
+		/// <summary>
+		/// Asynchronously get a body part as a stream.
+		/// </summary>
+		/// <remarks>
+		/// Asynchronously gets a body part as a stream.
+		/// </remarks>
+		/// <returns>The body part stream.</returns>
+		/// <param name="index">The index of the message.</param>
+		/// <param name="part">The desired body part.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// <paramref name="part"/> is <c>null</c>.
+		/// </exception>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <para><paramref name="index"/> is out of range.</para>
+		/// </exception>
+		/// <exception cref="System.ObjectDisposedException">
+		/// The <see cref="IMailStore"/> has been disposed.
+		/// </exception>
+		/// <exception cref="ServiceNotConnectedException">
+		/// The <see cref="IMailStore"/> is not connected.
+		/// </exception>
+		/// <exception cref="ServiceNotAuthenticatedException">
+		/// The <see cref="IMailStore"/> is not authenticated.
+		/// </exception>
+		/// <exception cref="FolderNotOpenException">
+		/// The folder is not currently open.
+		/// </exception>
+		/// <exception cref="MessageNotFoundException">
+		/// The <see cref="IMailStore"/> did not return the requested message stream.
+		/// </exception>
+		/// <exception cref="System.OperationCanceledException">
+		/// The operation was canceled via the cancellation token.
+		/// </exception>
+		/// <exception cref="System.IO.IOException">
+		/// An I/O error occurred.
+		/// </exception>
+		/// <exception cref="ProtocolException">
+		/// The server's response contained unexpected tokens.
+		/// </exception>
+		/// <exception cref="CommandException">
+		/// The command failed.
+		/// </exception>
+		public virtual Task<Stream> GetStreamAsync (int index, BodyPart part, CancellationToken cancellationToken = default, ITransferProgress progress = null)
+		{
+			if (index < 0 || index >= Count)
+				throw new ArgumentOutOfRangeException (nameof (index));
+
+			if (part == null)
+				throw new ArgumentNullException (nameof (part));
+
+			return GetStreamAsync (index, part.PartSpecifier, cancellationToken, progress);
+		}
+
+		/// <summary>
 		/// Get a substream of the specified body part.
 		/// </summary>
 		/// <remarks>
@@ -5783,6 +6216,9 @@ namespace MailKit {
 		/// </exception>
 		public virtual Task<Stream> GetStreamAsync (UniqueId uid, BodyPart part, int offset, int count, CancellationToken cancellationToken = default, ITransferProgress progress = null)
 		{
+			if (!uid.IsValid)
+				throw new ArgumentException ("The uid is invalid.", nameof (uid));
+
 			if (part == null)
 				throw new ArgumentNullException (nameof (part));
 
@@ -5943,6 +6379,9 @@ namespace MailKit {
 		/// <para>For more information about how to construct the <paramref name="section"/>,
 		/// see Section 6.4.5 of RFC3501.</para>
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartStreamsByUniqueIdAndSpecifier"/>
+		/// </example>
 		/// <returns>The stream.</returns>
 		/// <param name="uid">The UID of the message.</param>
 		/// <param name="section">The desired section of the message.</param>
@@ -5991,6 +6430,9 @@ namespace MailKit {
 		/// <para>For more information about how to construct the <paramref name="section"/>,
 		/// see Section 6.4.5 of RFC3501.</para>
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartStreamsByUniqueIdAndSpecifier"/>
+		/// </example>
 		/// <returns>The stream.</returns>
 		/// <param name="uid">The UID of the message.</param>
 		/// <param name="section">The desired section of the message.</param>

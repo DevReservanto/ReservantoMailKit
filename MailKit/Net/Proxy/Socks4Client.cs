@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -43,6 +43,9 @@ namespace MailKit.Net.Proxy
 	/// <remarks>
 	/// A SOCKS4 proxy client.
 	/// </remarks>
+	/// <example>
+	/// <code language="c#" source="Examples\ProxyExamples.cs" region="ProxyClient" />
+	/// </example>
 	public class Socks4Client : SocksClient
 	{
 		static readonly byte[] InvalidIPAddress = { 0, 0, 0, 1 };
@@ -152,7 +155,11 @@ namespace MailKit.Net.Proxy
 		{
 			cancellationToken.ThrowIfCancellationRequested ();
 
+#if NET6_0_OR_GREATER
+			var ipAddresses = await Dns.GetHostAddressesAsync (host, cancellationToken).ConfigureAwait (false);
+#else
 			var ipAddresses = await Dns.GetHostAddressesAsync (host).ConfigureAwait (false);
+#endif
 
 			return Resolve (host, ipAddresses);
 		}

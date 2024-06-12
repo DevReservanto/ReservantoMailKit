@@ -4,7 +4,7 @@
 // Authors: Steffen Kieß <s-kiess@web.de>
 //          Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -63,6 +63,23 @@ namespace MailKit.Net.Imap {
 
 			MailboxFilter = mailboxFilter;
 			Events = events;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:MailKit.Net.Imap.ImapEventGroup"/> class.
+		/// </summary>
+		/// <remarks>
+		/// Initializes a new instance of the <see cref="T:MailKit.Net.Imap.ImapEventGroup"/> class.
+		/// </remarks>
+		/// <param name="mailboxFilter">The mailbox filter.</param>
+		/// <param name="events">The list of IMAP events.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// <para><paramref name="mailboxFilter"/> is <c>null</c>.</para>
+		/// <para>-or-</para>
+		/// <para><paramref name="events"/> is <c>null</c>.</para>
+		/// </exception>
+		public ImapEventGroup (ImapMailboxFilter mailboxFilter, params ImapEvent[] events) : this (mailboxFilter, (IList<ImapEvent>) events)
+		{
 		}
 
 		/// <summary>
@@ -262,7 +279,7 @@ namespace MailKit.Net.Imap {
 			/// <para>The list of <paramref name="folders"/> contains folders that are not of
 			/// type <see cref="ImapFolder"/>.</para>
 			/// </exception>
-			public Mailboxes (params IMailFolder[] folders) : this ("MAILBOXES", folders)
+			public Mailboxes (params IMailFolder[] folders) : this ((IList<IMailFolder>) folders)
 			{
 			}
 
@@ -379,7 +396,7 @@ namespace MailKit.Net.Imap {
 			/// <para>The list of <paramref name="folders"/> contains folders that are not of
 			/// type <see cref="ImapFolder"/>.</para>
 			/// </exception>
-			public Subtree (params IMailFolder[] folders) : base ("SUBTREE", folders)
+			public Subtree (params IMailFolder[] folders) : this ((IList<IMailFolder>) folders)
 			{
 			}
 		}
@@ -645,9 +662,8 @@ namespace MailKit.Net.Imap {
 			/// Initializes a new instance of the <see cref="T:MailKit.Net.Imap.ImapEvent.MessageNew"/> class.
 			/// </remarks>
 			/// <param name="items">The message summary items to automatically retrieve for new messages.</param>
-			public MessageNew (MessageSummaryItems items = MessageSummaryItems.None) : base ("MessageNew", true)
+			public MessageNew (MessageSummaryItems items = MessageSummaryItems.None) : this (new FetchRequest (items))
 			{
-				request = new FetchRequest (items);
 			}
 
 			/// <summary>
@@ -664,9 +680,8 @@ namespace MailKit.Net.Imap {
 			/// <exception cref="ArgumentException">
 			/// <para>One or more of the specified <paramref name="headers"/> is invalid.</para>
 			/// </exception>
-			public MessageNew (MessageSummaryItems items, IEnumerable<HeaderId> headers) : base ("MessageNew", true)
+			public MessageNew (MessageSummaryItems items, IEnumerable<HeaderId> headers) : this (new FetchRequest (items, headers))
 			{
-				request = new FetchRequest (items, headers);
 			}
 
 			/// <summary>
@@ -683,9 +698,8 @@ namespace MailKit.Net.Imap {
 			/// <exception cref="ArgumentException">
 			/// <para>One or more of the specified <paramref name="headers"/> is invalid.</para>
 			/// </exception>
-			public MessageNew (MessageSummaryItems items, IEnumerable<string> headers) : base ("MessageNew", true)
+			public MessageNew (MessageSummaryItems items, IEnumerable<string> headers) : this (new FetchRequest (items, headers))
 			{
-				request = new FetchRequest (items, headers);
 			}
 
 			/// <summary>

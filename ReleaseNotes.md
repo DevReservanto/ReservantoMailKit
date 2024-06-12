@@ -1,5 +1,73 @@
 # Release Notes
 
+## MailKit 4.6.0 (2024-05-17)
+
+* Swallow SMTP RSET exceptions. These obscure other Send/SendAsync exceptions. Fixes a regression
+  introduced in 4.4.0. (issue [#1748](https://github.com/jstedfast/MailKit/issues/1748))
+* Fixed ImapUtils.FormatInternalDate() to properly handle negative timezone offsets with non-zero minutes.
+  (issue [#1743](https://github.com/jstedfast/MailKit/pull/1753))
+* Bumped MimeKit dependency to 4.6.0.
+
+## MailKit 4.5.0 (2024-04-13)
+
+* Added a new SmtpClient.RequireTLS property to fix sending mail via Strato.de.
+  (issue [#1737](https://github.com/jstedfast/MailKit/issues/1737))
+* Fixed SmtpClient to track the most recent response from the SMTP server in order to include
+  it in SmtpProtocolExceptions caused by unexpected server disconnects to provide more context.
+  (issue [#1744](https://github.com/jstedfast/MailKit/issues/1744))
+* Bumped MimeKit dependency to 4.5.0.
+
+## MailKit 4.4.0 (2024-03-02)
+
+* Added net8.0 targets
+* Split more sync/async logic to reduce allocations made by async state machines when
+  calling the synchronous public APIs instead of the async APIs.
+  (issue [#1335](https://github.com/jstedfast/MailKit/issues/1335))
+* Fixed logic for formatting IMAP FETCH HEADER.FIELDS.NOT corner case that was exposed by newly
+  added unit tests.
+* Fixed SmtpClient to disconnect during Authenticate/Async on socket errors.
+* Fixed SmtpClient's re-EHLO logic to disconnect on errors.
+* Added workaround for Zoho IMAP servers returning MODSEQ -1.
+  (issue [#1686](https://github.com/jstedfast/MailKit/issues/1686))
+* Added workaround for some IMAP servers that use () instead of NIL for an unset Content-Location header
+  in the BODYSTRUCTURE response.
+  (issue [#1700](https://github.com/jstedfast/MailKit/issues/1700))
+* Fixed an issue in the Socket.ConnectAsync logic that could result in unhandled exceptions on the
+  async thread if the ConnectAsync was cancelled.
+  (issue [#1703](https://github.com/jstedfast/MailKit/issues/1703))
+* Added work-around for Yandex IMAP GetBodyPart() response not including content.
+  (issue [#1708](https://github.com/jstedfast/MailKit/issues/1708))
+* Bumped MimeKit dependency to 4.4.0.
+
+## MailKit 4.3.0 (2023-11-11)
+
+* Fixed an ArgumentOutOfRangeException error in Fetch(int min, int max, ...) where min and max were greater
+  than folder.Count. (issue [#1640](https://github.com/jstedfast/MailKit/issues/1640))
+* Fixed parsing of IMAP FETCH (message/stream) responses with unsolicited FLAGS.
+* Fixed support for the IMAP FILTERS extension. Previously this extension was not properly detected.
+* When parsing IMAP CAPABILITIES, treat lone '+' tokens as atoms.
+  (issue [#1654](https://github.com/jstedfast/MailKit/issues/1654))
+* Bumped MimeKit dependency to 4.3.0.
+
+## MailKit 4.2.0 (2023-09-02)
+
+* Fixed a bug where the HttpProxyClient and HttpsProxyClient could end up reading the mail server greeting,
+  causing a connection failure for the ImapClient/Pop3Client/SmtpClient.
+  (issue [#1603](https://github.com/jstedfast/MailKit/issues/1603))
+* Parse IMAP quota values as ulongs instead of uints for GMail compatibility.
+  (issue [#1602](https://github.com/jstedfast/MailKit/issues/1602))
+* Added support for decoding SMTP DATA to the SmtpDataFilter.
+  (issue [#1607](https://github.com/jstedfast/MailKit/issues/1607))
+* Added a Pop3Client.Size property. (issue [#1623](https://github.com/jstedfast/MailKit/issues/1623))
+* Refactored more ImapClient commands to split sync/async implementations in order to improve
+  performance and reduce GC pressure. (issue [#1335](https://github.com/jstedfast/MailKit/issues/1335))
+* Added new IMailFolder.GetStream() methods that just take a uid/index and a BodyPart.
+* Added IMailFolder.GetStream/Async() methods that just take a uid or index.
+* Improved initial `List<IMessageSummary>` capacity estimation for `Fetch (IList<UniqueId>, ...)`.
+* Fixed ByteArrayBuilder.TrimNewLine() to check array bounds properly.
+  (issue [#1634](https://github.com/jstedfast/MailKit/issues/1634))
+* Bumped MimeKit dependency to 4.2.0.
+
 ## MailKit 4.1.0 (2023-06-17)
 
 * Fixed queueing logic for pipelining SMTP and POP3 commands.

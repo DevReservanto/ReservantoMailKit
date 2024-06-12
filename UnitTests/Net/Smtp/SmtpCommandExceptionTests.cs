@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,9 @@
 // THE SOFTWARE.
 //
 
-using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+#if NET6_0
 
-using NUnit.Framework;
+using System.Runtime.Serialization.Formatters.Binary;
 
 using MimeKit;
 using MailKit.Net.Smtp;
@@ -45,13 +43,13 @@ namespace UnitTests.Net.Smtp {
 				stream.Position = 0;
 
 				var ex = (SmtpCommandException) formatter.Deserialize (stream);
-				Assert.AreEqual (expected.ErrorCode, ex.ErrorCode, "Unexpected ErrorCode.");
-				Assert.AreEqual (expected.StatusCode, ex.StatusCode, "Unexpected StatusCode.");
+				Assert.That (ex.ErrorCode, Is.EqualTo (expected.ErrorCode), "Unexpected ErrorCode.");
+				Assert.That (ex.StatusCode, Is.EqualTo (expected.StatusCode), "Unexpected StatusCode.");
 
 				if (expected.Mailbox != null)
-					Assert.IsTrue (expected.Mailbox.Equals (ex.Mailbox), "Unexpected Mailbox.");
+					Assert.That (ex.Mailbox, Is.EqualTo (expected.Mailbox), "Unexpected Mailbox.");
 				else
-					Assert.IsNull (ex.Mailbox, "Expected Mailbox to be null.");
+					Assert.That (ex.Mailbox, Is.Null, "Expected Mailbox to be null.");
 			}
 		}
 
@@ -70,3 +68,5 @@ namespace UnitTests.Net.Smtp {
 		}
 	}
 }
+
+#endif // NET6_0

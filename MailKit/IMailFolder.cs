@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -324,6 +324,9 @@ namespace MailKit {
 		/// <remarks>
 		/// Gets the total number of messages in the folder.
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessagesByIndex"/>
+		/// </example>
 		/// <value>The total number of messages.</value>
 		int Count { get; }
 
@@ -1458,7 +1461,7 @@ namespace MailKit {
 		/// not requested at all.</para>
 		/// </remarks>
 		/// <example>
-		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadBodyParts"/>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartsByUniqueId"/>
 		/// </example>
 		/// <returns>An enumeration of summaries for the requested messages.</returns>
 		/// <param name="uids">The UIDs.</param>
@@ -1668,6 +1671,9 @@ namespace MailKit {
 		/// <remarks>
 		/// Gets the specified message.
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessagesByUniqueId"/>
+		/// </example>
 		/// <returns>The message.</returns>
 		/// <param name="uid">The UID of the message.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
@@ -1680,6 +1686,9 @@ namespace MailKit {
 		/// <remarks>
 		/// Asynchronously gets the specified message.
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessagesByUniqueId"/>
+		/// </example>
 		/// <returns>The message.</returns>
 		/// <param name="uid">The UID of the message.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
@@ -1692,6 +1701,9 @@ namespace MailKit {
 		/// <remarks>
 		/// Gets the specified message.
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessagesByIndex"/>
+		/// </example>
 		/// <returns>The message.</returns>
 		/// <param name="index">The index of the message.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
@@ -1704,6 +1716,9 @@ namespace MailKit {
 		/// <remarks>
 		/// Asynchronously gets the specified message.
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessagesByIndex"/>
+		/// </example>
 		/// <returns>The message.</returns>
 		/// <param name="index">The index of the message.</param>
 		/// <param name="cancellationToken">The cancellation token.</param>
@@ -1717,7 +1732,7 @@ namespace MailKit {
 		/// Gets the specified body part.
 		/// </remarks>
 		/// <example>
-		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadBodyParts"/>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartsByUniqueId"/>
 		/// </example>
 		/// <returns>The body part.</returns>
 		/// <param name="uid">The UID of the message.</param>
@@ -1732,6 +1747,9 @@ namespace MailKit {
 		/// <remarks>
 		/// Asynchronously gets the specified body part.
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartsByUniqueId"/>
+		/// </example>
 		/// <returns>The body part.</returns>
 		/// <param name="uid">The UID of the message.</param>
 		/// <param name="part">The body part.</param>
@@ -1764,6 +1782,66 @@ namespace MailKit {
 		/// <param name="cancellationToken">The cancellation token.</param>
 		/// <param name="progress">The progress reporting mechanism.</param>
 		Task<MimeEntity> GetBodyPartAsync (int index, BodyPart part, CancellationToken cancellationToken = default, ITransferProgress progress = null);
+
+		/// <summary>
+		/// Get a message stream.
+		/// </summary>
+		/// <remarks>
+		/// Gets a message stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessageStreamsByUniqueId"/>
+		/// </example>
+		/// <returns>The message stream.</returns>
+		/// <param name="uid">The UID of the message.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		Stream GetStream (UniqueId uid, CancellationToken cancellationToken = default, ITransferProgress progress = null);
+
+		/// <summary>
+		/// Asynchronously get a message stream.
+		/// </summary>
+		/// <remarks>
+		/// Asynchronously gets a message stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessageStreamsByUniqueId"/>
+		/// </example>
+		/// <returns>The message stream.</returns>
+		/// <param name="uid">The UID of the message.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		Task<Stream> GetStreamAsync (UniqueId uid, CancellationToken cancellationToken = default, ITransferProgress progress = null);
+
+		/// <summary>
+		/// Get a message stream.
+		/// </summary>
+		/// <remarks>
+		/// Gets a message stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessageStreamsByIndex"/>
+		/// </example>
+		/// <returns>The message stream.</returns>
+		/// <param name="index">The index of the message.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		Stream GetStream (int index, CancellationToken cancellationToken = default, ITransferProgress progress = null);
+
+		/// <summary>
+		/// Asynchronously get a message stream.
+		/// </summary>
+		/// <remarks>
+		/// Asynchronously gets a message stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadMessageStreamsByIndex"/>
+		/// </example>
+		/// <returns>The message stream.</returns>
+		/// <param name="index">The index of the message.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		Task<Stream> GetStreamAsync (int index, CancellationToken cancellationToken = default, ITransferProgress progress = null);
 
 		/// <summary>
 		/// Get a substream of the specified message.
@@ -1832,6 +1910,64 @@ namespace MailKit {
 		/// <param name="cancellationToken">The cancellation token.</param>
 		/// <param name="progress">The progress reporting mechanism.</param>
 		Task<Stream> GetStreamAsync (int index, int offset, int count, CancellationToken cancellationToken = default, ITransferProgress progress = null);
+
+		/// <summary>
+		/// Get a body part as a stream.
+		/// </summary>
+		/// <remarks>
+		/// Gets a body part as a stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartStreamsByUniqueId"/>
+		/// </example>
+		/// <returns>The body part stream.</returns>
+		/// <param name="uid">The UID of the message.</param>
+		/// <param name="part">The desired body part.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		Stream GetStream (UniqueId uid, BodyPart part, CancellationToken cancellationToken = default, ITransferProgress progress = null);
+
+		/// <summary>
+		/// Asynchronously get a body part as a stream.
+		/// </summary>
+		/// <remarks>
+		/// Asynchronously gets a body part as a stream.
+		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartStreamsByUniqueId"/>
+		/// </example>
+		/// <returns>The body part stream.</returns>
+		/// <param name="uid">The UID of the message.</param>
+		/// <param name="part">The desired body part.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		Task<Stream> GetStreamAsync (UniqueId uid, BodyPart part, CancellationToken cancellationToken = default, ITransferProgress progress = null);
+
+		/// <summary>
+		/// Get a body part as a stream.
+		/// </summary>
+		/// <remarks>
+		/// Gets a body part as a stream.
+		/// </remarks>
+		/// <returns>The body part stream.</returns>
+		/// <param name="index">The index of the message.</param>
+		/// <param name="part">The desired body part.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		Stream GetStream (int index, BodyPart part, CancellationToken cancellationToken = default, ITransferProgress progress = null);
+
+		/// <summary>
+		/// Asynchronously get a body part as a stream.
+		/// </summary>
+		/// <remarks>
+		/// Asynchronously gets a body part as a stream.
+		/// </remarks>
+		/// <returns>The body part stream.</returns>
+		/// <param name="index">The index of the message.</param>
+		/// <param name="part">The desired body part.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <param name="progress">The progress reporting mechanism.</param>
+		Task<Stream> GetStreamAsync (int index, BodyPart part, CancellationToken cancellationToken = default, ITransferProgress progress = null);
 
 		/// <summary>
 		/// Get a substream of the specified body part.
@@ -1913,6 +2049,9 @@ namespace MailKit {
 		/// <para>For more information about how to construct the <paramref name="section"/>,
 		/// see Section 6.4.5 of RFC3501.</para>
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartStreamsByUniqueIdAndSpecifier"/>
+		/// </example>
 		/// <returns>The stream.</returns>
 		/// <param name="uid">The UID of the message.</param>
 		/// <param name="section">The desired section of the message.</param>
@@ -1928,6 +2067,9 @@ namespace MailKit {
 		/// <para>For more information about how to construct the <paramref name="section"/>,
 		/// see Section 6.4.5 of RFC3501.</para>
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartStreamsByUniqueIdAndSpecifier"/>
+		/// </example>
 		/// <returns>The stream.</returns>
 		/// <param name="uid">The UID of the message.</param>
 		/// <param name="section">The desired section of the message.</param>

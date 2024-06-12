@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,7 @@
 // THE SOFTWARE.
 //
 
-using System;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-using NUnit.Framework;
 
 using MimeKit;
 using MailKit;
@@ -37,7 +32,7 @@ using MailKit.Net.Imap;
 
 namespace UnitTests.Net.Imap {
 	[TestFixture]
-	public  class ImapCommandTests
+	public  class ImapCommandTests : IDisposable
 	{
 		readonly ImapEngine Engine;
 		readonly ImapFolder Inbox;
@@ -50,6 +45,12 @@ namespace UnitTests.Net.Imap {
 
 			var args = new ImapFolderConstructorArgs (Engine, "INBOX", FolderAttributes.None, '.');
 			Inbox = new ImapFolder (args);
+		}
+
+		public void Dispose ()
+		{
+			Engine.Dispose ();
+			GC.SuppressFinalize (this);
 		}
 
 		static ImapFolder CreateImapFolderDelegate (ImapFolderConstructorArgs args)
@@ -96,7 +97,7 @@ namespace UnitTests.Net.Imap {
 				var ic = new ImapCommand (Engine, CancellationToken.None, null, "Lets try %X as a format argument.");
 				Assert.Fail ("Expected FormatException");
 			} catch (FormatException ex) {
-				Assert.AreEqual ("The %X format specifier is not supported.", ex.Message);
+				Assert.That (ex.Message, Is.EqualTo ("The %X format specifier is not supported."));
 			} catch (Exception ex) {
 				Assert.Fail ($"Expected FormatException, but got {ex.GetType ().Name}");
 			}
@@ -105,7 +106,7 @@ namespace UnitTests.Net.Imap {
 				var ic = ImapCommand.EstimateCommandLength (Engine, "Lets try %Y as a format argument.");
 				Assert.Fail ("Expected FormatException");
 			} catch (FormatException ex) {
-				Assert.AreEqual ("The %Y format specifier is not supported.", ex.Message);
+				Assert.That (ex.Message, Is.EqualTo ("The %Y format specifier is not supported."));
 			} catch (Exception ex) {
 				Assert.Fail ($"Expected FormatException, but got {ex.GetType ().Name}");
 			}
@@ -119,18 +120,18 @@ namespace UnitTests.Net.Imap {
 			var expected = $"SEARCH TEXT {{{literalLength}}}\r\n{koreanProverb}".Length;
 
 			var length = ImapCommand.EstimateCommandLength (Engine, "SEARCH TEXT %S", koreanProverb);
-			Assert.AreEqual (expected, length);
+			Assert.That (length, Is.EqualTo (expected));
 
 			try {
 				Engine.Capabilities = ImapCapabilities.IMAP4rev1 | ImapCapabilities.LiteralPlus;
 				expected = $"SEARCH TEXT {{{literalLength}+}}\r\n{koreanProverb}".Length;
 				length = ImapCommand.EstimateCommandLength (Engine, "SEARCH TEXT %S", koreanProverb);
-				Assert.AreEqual (expected, length, "LITERAL+");
+				Assert.That (length, Is.EqualTo (expected), "LITERAL+");
 
 				Engine.Capabilities = ImapCapabilities.IMAP4rev1 | ImapCapabilities.LiteralMinus;
 				expected = $"SEARCH TEXT {{{literalLength}+}}\r\n{koreanProverb}".Length;
 				length = ImapCommand.EstimateCommandLength (Engine, "SEARCH TEXT %S", koreanProverb);
-				Assert.AreEqual (expected, length, "LITERAL-");
+				Assert.That (length, Is.EqualTo (expected), "LITERAL-");
 			} finally {
 				Engine.Capabilities = ImapCapabilities.IMAP4rev1;
 			}

@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,21 @@
 // THE SOFTWARE.
 //
 
-using System;
-using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Net.Sockets;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 
 using MailKit.Net;
 
 using SslStream = System.Net.Security.SslStream;
-using System.Globalization;
 
-namespace UnitTests.Net.Proxy
-{
+namespace UnitTests.Net.Proxy {
 	class HttpProxyListener : ProxyListener
 	{
-		X509Certificate2 certificate;
-		bool https;
+		readonly X509Certificate2 certificate;
+		readonly bool https;
 
 		public HttpProxyListener ()
 		{

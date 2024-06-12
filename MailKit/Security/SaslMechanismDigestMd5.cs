@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,10 +33,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 
 using MimeKit.Utils;
-
-#if NETSTANDARD1_3 || NETSTANDARD1_6
-using MD5 = MimeKit.Cryptography.MD5;
-#endif
 
 namespace MailKit.Security {
 	/// <summary>
@@ -319,6 +315,8 @@ namespace MailKit.Security {
 			return true;
 		}
 
+		static readonly char[] Comma = new char[] { ',' };
+
 		public static DigestChallenge Parse (string token)
 		{
 			var challenge = new DigestChallenge ();
@@ -333,7 +331,7 @@ namespace MailKit.Security {
 
 				switch (key.ToLowerInvariant ()) {
 				case "realm":
-					challenge.Realms = value.Split (new [] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+					challenge.Realms = value.Split (Comma, StringSplitOptions.RemoveEmptyEntries);
 					break;
 				case "nonce":
 					if (challenge.Nonce != null)
@@ -341,13 +339,13 @@ namespace MailKit.Security {
 					challenge.Nonce = value;
 					break;
 				case "qop":
-					foreach (var qop in value.Split (new [] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+					foreach (var qop in value.Split (Comma, StringSplitOptions.RemoveEmptyEntries))
 						challenge.Qop.Add (qop.Trim ());
 					break;
 				case "stale":
 					if (challenge.Stale.HasValue)
 						throw new SaslException ("DIGEST-MD5", SaslErrorCode.InvalidChallenge, string.Format ("Invalid SASL challenge from the server: {0}", token));
-					challenge.Stale = value.ToLowerInvariant () == "true";
+					challenge.Stale = value.Equals ("true", StringComparison.OrdinalIgnoreCase);
 					break;
 				case "maxbuf":
 					if (challenge.MaxBuf.HasValue || !int.TryParse (value, NumberStyles.None, CultureInfo.InvariantCulture, out maxbuf))
@@ -367,7 +365,7 @@ namespace MailKit.Security {
 				case "cipher":
 					if (challenge.Ciphers.Count > 0)
 						throw new SaslException ("DIGEST-MD5", SaslErrorCode.InvalidChallenge, string.Format ("Invalid SASL challenge from the server: {0}", token));
-					foreach (var cipher in value.Split (new [] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+					foreach (var cipher in value.Split (Comma, StringSplitOptions.RemoveEmptyEntries))
 						challenge.Ciphers.Add (cipher.Trim ());
 					break;
 				}

@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,7 @@
 // THE SOFTWARE.
 //
 
-using System;
-using System.IO;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 using NUnit.Framework;
 
@@ -71,18 +66,19 @@ namespace UnitTests.Net.Smtp {
 		SendResponse,
 		WaitForCommand,
 		WaitForEndOfData,
+		UnexpectedDisconnect
 	}
 
 	class SmtpReplayStream : Stream
 	{
 		readonly MemoryStream sent = new MemoryStream ();
 		readonly IList<SmtpReplayCommand> commands;
+		readonly SmtpResponseMode mode;
+		readonly bool asyncIO;
 		int timeout = 100000;
 		SmtpReplayState state;
-		SmtpResponseMode mode;
 		Stream stream;
 		bool disposed;
-		bool asyncIO;
 		bool isAsync;
 		int index;
 
@@ -143,13 +139,16 @@ namespace UnitTests.Net.Smtp {
 			CheckDisposed ();
 
 			if (asyncIO) {
-				Assert.IsTrue (isAsync, "Trying to Read in an async unit test.");
+				Assert.That (isAsync, Is.True, "Trying to Read in an async unit test.");
 			} else {
-				Assert.IsFalse (isAsync, "Trying to ReadAsync in a non-async unit test.");
+				Assert.That (isAsync, Is.False, "Trying to ReadAsync in a non-async unit test.");
 			}
 
-			Assert.AreEqual (SmtpReplayState.SendResponse, state, "Trying to read when no command given.");
-			Assert.IsNotNull (stream, "Trying to read when no data available.");
+			if (state == SmtpReplayState.UnexpectedDisconnect)
+				return 0;
+
+			Assert.That (state, Is.EqualTo (SmtpReplayState.SendResponse), "Trying to read when no command given.");
+			Assert.That (stream, Is.Not.Null, "Trying to read when no data available.");
 
 			int nread = 0;
 
@@ -203,12 +202,12 @@ namespace UnitTests.Net.Smtp {
 			CheckDisposed ();
 
 			if (asyncIO) {
-				Assert.IsTrue (isAsync, "Trying to Write in an async unit test.");
+				Assert.That (isAsync, Is.True, "Trying to Write in an async unit test.");
 			} else {
-				Assert.IsFalse (isAsync, "Trying to WriteAsync in a non-async unit test.");
+				Assert.That (isAsync, Is.False, "Trying to WriteAsync in a non-async unit test.");
 			}
 
-			Assert.AreNotEqual (SmtpReplayState.SendResponse, state, "Trying to write when a command has already been given.");
+			Assert.That (state, Is.Not.EqualTo (SmtpReplayState.SendResponse), "Trying to write when a command has already been given.");
 
 			sent.Write (buffer, offset, count);
 
@@ -229,7 +228,7 @@ namespace UnitTests.Net.Smtp {
 						}
 					}
 
-					Assert.AreEqual (commands[index].Command, command, "Commands did not match.");
+					Assert.That (command, Is.EqualTo (commands[index].Command), "Commands did not match.");
 
 					stream = GetResourceStream (commands[index].Resource);
 					state = SmtpReplayState.SendResponse;
@@ -270,14 +269,14 @@ namespace UnitTests.Net.Smtp {
 		{
 			CheckDisposed ();
 
-			Assert.IsFalse (asyncIO, "Trying to Flush in an async unit test.");
+			Assert.That (asyncIO, Is.False, "Trying to Flush in an async unit test.");
 		}
 
 		public override Task FlushAsync (CancellationToken cancellationToken)
 		{
 			CheckDisposed ();
 
-			Assert.IsTrue (asyncIO, "Trying to FlushAsync in a non-async unit test.");
+			Assert.That (asyncIO, Is.True, "Trying to FlushAsync in a non-async unit test.");
 
 			return Task.FromResult (true);
 		}

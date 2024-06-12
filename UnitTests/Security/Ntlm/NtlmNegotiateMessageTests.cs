@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +23,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
-
-using System;
-
-using NUnit.Framework;
 
 using MailKit.Security.Ntlm;
 
@@ -51,9 +47,9 @@ namespace UnitTests.Security.Ntlm {
 		{
 			var type1 = new NtlmNegotiateMessage (NtlmFlags.NegotiateUnicode | NtlmFlags.NegotiateOem | NtlmFlags.RequestTarget | NtlmFlags.NegotiateNtlm | NtlmFlags.NegotiateAlwaysSign, "Ursa-Minor", "LightCity");
 
-			Assert.AreEqual (1, type1.Type, "Type");
-			Assert.AreEqual ((NtlmFlags) 0xb207, type1.Flags, "Flags");
-			Assert.AreEqual ("TlRMTVNTUAABAAAAB7IAAAoACgAxAAAACQAJACgAAAAAAAAAAAAAAExJR0hUQ0lUWVVSU0EtTUlOT1I=", Convert.ToBase64String (type1.Encode ()), "Encode");
+			Assert.That (type1.Type, Is.EqualTo (1), "Type");
+			Assert.That (type1.Flags, Is.EqualTo ((NtlmFlags) 0xb207), "Flags");
+			Assert.That (Convert.ToBase64String (type1.Encode ()), Is.EqualTo ("TlRMTVNTUAABAAAAB7IAAAoACgAxAAAACQAJACgAAAAAAAAAAAAAAExJR0hUQ0lUWVVSU0EtTUlOT1I="), "Encode");
 		}
 
 		[Test]
@@ -63,10 +59,10 @@ namespace UnitTests.Security.Ntlm {
 			byte[] rawData = { 0x4e, 0x54, 0x4c, 0x4d, 0x53, 0x53, 0x50, 0x00, 0x01, 0x00, 0x00, 0x00, 0x03, 0xb2, 0x00, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x29, 0x00, 0x00, 0x00, 0x09, 0x00, 0x09, 0x00, 0x20, 0x00, 0x00, 0x00, 0x4c, 0x49, 0x47, 0x48, 0x54, 0x43, 0x49, 0x54, 0x59, 0x55, 0x52, 0x53, 0x41, 0x2d, 0x4d, 0x49, 0x4e, 0x4f, 0x52 };
 			var type1 = new NtlmNegotiateMessage (rawData, 0, rawData.Length);
 
-			Assert.AreEqual (1, type1.Type, "Type");
-			Assert.AreEqual ((NtlmFlags) 0xb203, type1.Flags, "Flags");
-			Assert.AreEqual ("URSA-MINOR", type1.Domain, "Domain");
-			Assert.AreEqual ("LIGHTCITY", type1.Workstation, "Workstation");
+			Assert.That (type1.Type, Is.EqualTo (1), "Type");
+			Assert.That (type1.Flags, Is.EqualTo ((NtlmFlags) 0xb203), "Flags");
+			Assert.That (type1.Domain, Is.EqualTo ("URSA-MINOR"), "Domain");
+			Assert.That (type1.Workstation, Is.EqualTo ("LIGHTCITY"), "Workstation");
 		}
 
 		[Test]
@@ -76,10 +72,10 @@ namespace UnitTests.Security.Ntlm {
 			byte[] rawData = { 0x4e, 0x54, 0x4c, 0x4d, 0x53, 0x53, 0x50, 0x00, 0x01, 0x00, 0x00, 0x00, 0x07, 0x32, 0x00, 0x00, 0x06, 0x00, 0x06, 0x00, 0x2b, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x0b, 0x00, 0x20, 0x00, 0x00, 0x00, 0x57, 0x4f, 0x52, 0x4b, 0x53, 0x54, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x44, 0x4f, 0x4d, 0x41, 0x49, 0x4e };
 			var type1 = new NtlmNegotiateMessage (rawData, 0, rawData.Length);
 
-			Assert.AreEqual (1, type1.Type, "Type");
-			Assert.AreEqual ((NtlmFlags) 0x3207, type1.Flags, "Flags");
-			Assert.AreEqual ("DOMAIN", type1.Domain, "Domain");
-			Assert.AreEqual ("WORKSTATION", type1.Workstation, "Workstation");
+			Assert.That (type1.Type, Is.EqualTo (1), "Type");
+			Assert.That (type1.Flags, Is.EqualTo ((NtlmFlags) 0x3207), "Flags");
+			Assert.That (type1.Domain, Is.EqualTo ("DOMAIN"), "Domain");
+			Assert.That (type1.Workstation, Is.EqualTo ("WORKSTATION"), "Workstation");
 		}
 	}
 }

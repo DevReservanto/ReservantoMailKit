@@ -3,7 +3,7 @@
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
 //
-// Copyright (c) 2013-2023 .NET Foundation and Contributors
+// Copyright (c) 2013-2024 .NET Foundation and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -97,7 +97,7 @@ namespace MailKit {
 		/// methods.</para>
 		/// </remarks>
 		/// <example>
-		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadBodyParts"/>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartsByUniqueId"/>
 		/// </example>
 		/// <value>The text body if it exists; otherwise, <c>null</c>.</value>
 		BodyPartText TextBody { get; }
@@ -113,6 +113,9 @@ namespace MailKit {
 		/// or <a href="Overload_MailKit_IMailFolder_FetchAsync.htm">FetchAsync</a>
 		/// methods.</para>
 		/// </remarks>
+		/// <example>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartsByUniqueId"/>
+		/// </example>
 		/// <value>The html body if it exists; otherwise, <c>null</c>.</value>
 		BodyPartText HtmlBody { get; }
 
@@ -146,7 +149,7 @@ namespace MailKit {
 		/// methods.</para>
 		/// </remarks>
 		/// <example>
-		/// <code language="c#" source="Examples\ImapExamples.cs" region="DownloadBodyParts"/>
+		/// <code language="c#" source="Examples\ImapBodyPartExamples.cs" region="GetBodyPartsByUniqueId"/>
 		/// </example>
 		/// <value>The attachments.</value>
 		IEnumerable<BodyPartBasic> Attachments { get; }
