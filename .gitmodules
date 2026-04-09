@@ -1,3 +1,4 @@
 [submodule "submodules/MimeKit"]
 	path = submodules/MimeKit
 	url = https://github.com/DevReservanto/ReservantoMimeKit.git
+	branch = master
